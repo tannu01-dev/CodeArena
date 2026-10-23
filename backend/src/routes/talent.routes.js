@@ -1,0 +1,13 @@
+const express = require("express");
+const router = express.Router();
+const auth = require("../middleware/authenticate");
+const role = require("../middleware/requireRole");
+const c = require("../controllers/talent.controller");
+router.use(auth);
+router.get("/profile", role("candidate"), c.getMyProfile);
+router.put("/profile", role("candidate"), c.upsertMyProfile);
+router.put("/consent", role("candidate"), c.setConsent);
+router.delete("/profile", role("candidate"), c.deleteProfile);
+router.get("/search", role("recruiter", "admin"), c.searchCandidates);
+router.get("/match/:jobId", role("recruiter", "admin"), c.matchCandidates);
+module.exports = router;

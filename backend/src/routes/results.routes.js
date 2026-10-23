@@ -1,0 +1,14 @@
+const express = require("express");
+const router = express.Router();
+const auth = require("../middleware/authenticate");
+const role = require("../middleware/requireRole");
+const c = require("../controllers/results.controller");
+router.use(auth);
+router.get("/candidate", role("candidate"), c.candidateReports);
+router.get("/history/:attemptId", c.submissionHistory);
+router.get("/recruiter/analytics", role("recruiter", "admin"), c.recruiterAnalytics);
+router.get("/recruiter/submissions", role("recruiter", "admin"), c.recruiterSubmissions);
+router.post("/recruiter/submissions/:attemptId/re-evaluate", role("recruiter", "admin"), c.reevaluateSubmission);
+router.get("/export.csv", role("recruiter", "admin"), c.exportResults);
+router.get("/audit", role("admin"), c.auditLogs);
+module.exports = router;

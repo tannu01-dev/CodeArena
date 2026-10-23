@@ -1,0 +1,18 @@
+const express = require("express");
+const router = express.Router();
+const auth = require("../middleware/authenticate");
+const role = require("../middleware/requireRole");
+const c = require("../controllers/hiring.controller");
+router.use(auth);
+router.get("/jobs", c.listJobs);
+router.get("/jobs/:jobId", c.getJob);
+router.post("/jobs", role("recruiter", "admin"), c.createJob);
+router.patch("/jobs/:jobId", role("recruiter", "admin"), c.updateJob);
+router.post("/jobs/:jobId/apply", role("candidate"), c.applyToJob);
+router.get("/jobs/:jobId/applications", role("recruiter", "admin"), c.jobApplications);
+router.get("/applications/mine", role("candidate"), c.myApplications);
+router.patch("/applications/:applicationId", role("recruiter", "admin"), c.updateApplication);
+router.post("/invitations", role("recruiter", "admin"), c.createInvitation);
+router.get("/invitations/mine", role("candidate"), c.myInvitations);
+router.patch("/invitations/:invitationId/respond", role("candidate"), c.respondInvitation);
+module.exports = router;

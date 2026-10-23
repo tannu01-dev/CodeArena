@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const auth = require("../middleware/authenticate");
+const role = require("../middleware/requireRole");
+const c = require("../controllers/admin.controller");
+router.use(auth, role("admin"));
+router.get("/overview", c.overview);
+router.get("/users", c.listUsers);
+router.patch("/users/:userId", c.updateUser);
+router.post("/attempts/:attemptId/terminate", c.terminateAttempt);
+module.exports = router;
