@@ -33,17 +33,19 @@ function verifyToken(token) {
   });
 }
 
+
 function getCookieOptions() {
   const production = process.env.NODE_ENV === "production";
 
   return {
     httpOnly: true,
     secure: production,
-    sameSite: "lax",
+    sameSite: production ? "none" : "lax",
     path: "/",
     maxAge: 24 * 60 * 60 * 1000
   };
 }
+
 
 function getCookieName() {
   return process.env.COOKIE_NAME || "codearena_token";
